@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth bg-[#09090B] text-[#F3F1ED] antialiased">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BOMNAL (봄날) — Issue 04 // Experimental Folio</title>
+
+  <!-- Google Fonts: Cormorant Garamond, Playfair Display, Noto Serif KR, JetBrains Mono, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+KR:wght@700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,600;1,900&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#09090B',
+            surface: '#121216',
+            ink: '#F3F1ED',
+            muted: '#8A8782',
+            blossom: '#FF4D79',
+            alleycyan: '#38BDF8',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            kr: ['"Noto Serif KR"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --bg-void: #09090B;
+      --bg-surface: #121216;
+      --hairline: rgba(243, 241, 237, 0.12);
+      --ink-primary: #F3F1ED;
+      --ink-muted: #8A8782;
+      --accent-pink: #FF4D79;
+      --accent-cyan: #38BDF8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background-color: var(--bg-void);
+      color: var(--ink-primary);
+      font-family: 'Inter', sans-serif;
+      overflow-x: clip;
+    }
+
+    ::selection {
+      background: rgba(255, 77, 121, 0.35);
+      color: #F3F1ED;
+    }
+
+    /* 16-Column Asymmetric Editorial Grid */
+    .grid-16 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      .grid-16 {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 16px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .grid-16 {
+        grid-template-columns: repeat(16, minmax(0, 1fr));
+        gap: 16px;
+      }
+    }
+
+    /* Vertical Writing Modes */
+    .vertical-rl {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    .vertical-upright {
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+    }
+
+    /* Film Grain SVG Noise Overlay */
+    .film-grain {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Blend-mode Experimental Typography */
+    .blend-diff {
+      mix-blend-mode: difference;
+    }
+    .blend-excl {
+      mix-blend-mode: exclusion;
+    }
+
+    /* Light Table Dotted Coordinate Grid */
+    .light-table-bg {
+      background-color: #0B0B0E;
+      background-image:
+        radial-gradient(rgba(243, 241, 237, 0.16) 1px, transparent 1px),
+        linear-gradient(to right, rgba(243, 241, 237, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(243, 241, 237, 0.03) 1px, transparent 1px);
+      background-size: 28px 28px, 140px 140px, 140px 140px;
+    }
+
+    /* Scroll Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Blueprint Mode Redline Highlight */
+    body.blueprint-active [data-figma]:hover {
+      outline: 1px dashed #FF4D79 !important;
+      outline-offset: 3px;
+      cursor: crosshair !important;
+    }
+
+    /* Draggable Light Table Plate transitions */
+    .collage-plate {
+      touch-action: none;
+      user-select: none;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .collage-plate.is-animating {
+      transition: left 0.75s cubic-bezier(0.19, 1, 0.22, 1),
+                  top 0.75s cubic-bezier(0.19, 1, 0.22, 1),
+                  transform 0.75s cubic-bezier(0.19, 1, 0.22, 1),
+                  box-shadow 0.25s ease;
+    }
+
+    /* Interactive Marginalia Button */
+    .marginalia-trigger {
+      border-bottom: 1px solid #FF4D79;
+      padding-bottom: 1px;
+      color: #F3F1ED;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .marginalia-trigger:hover,
+    .marginalia-trigger.is-open {
+      background-color: rgba(255, 77, 121, 0.22);
+      color: #FF4D79;
+    }
+
+    /* Skewed Brand Watermark */
+    .skew-bomnal {
+      transform: skewX(-14deg);
+    }
+
+    /* Seismograph Bar Animation */
+    .seismo-bar {
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-[#09090B] text-[#F3F1ED] relative">
+
+  <!-- Subtle Full-Viewport SVG Film Grain Overlay -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- ===================================================================== -->
+  <!-- FIGMA BLUEPRINT 16-COLUMN OVERLAY + GOLDEN RATIO GUIDES (Key: G)      -->
+  <!-- ===================================================================== -->
+  <div
+    id="blueprint-overlay"
+    aria-hidden="true"
+    class="fixed inset-0 z-[85] pointer-events-none hidden"
+  >
+    <!-- Top Margin Ruler -->
+    <div class="fixed top-0 inset-x-0 h-5 bg-[#FF4D79]/10 border-b border-[#FF4D79]/30 flex items-center justify-between px-12 font-mono text-[8px] text-[#FF4D79]">
+      <span>MARGIN 48PX</span>
+      <span>1440PX ARTBOARD // 16 COLS // 16PX GUTTER // GOLDEN RATIO 38.2% &amp; 61.8%</span>
+      <span>MARGIN 48PX</span>
+    </div>
+
+    <!-- Golden Ratio Vertical Guides -->
+    <div class="fixed top-0 bottom-0 left-[38.2%] w-[1px] border-l border-dashed border-[#38BDF8]/60">
+      <span class="absolute top-16 left-1.5 font-mono text-[8px] text-[#38BDF8] bg-[#09090B]/80 px-1">φ 38.2%</span>
+    </div>
+    <div class="fixed top-0 bottom-0 left-[61.8%] w-[1px] border-l border-dashed border-[#38BDF8]/60">
+      <span class="absolute top-16 left-1.5 font-mono text-[8px] text-[#38BDF8] bg-[#09090B]/80 px-1">φ 61.8%</span>
+    </div>
+
+    <!-- 16 Pink Translucent Columns -->
+    <div class="w-full h-full px-4 md:px-8 lg:px-[48px]">
+      <div class="grid-16 h-full">
+        <div class="bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">01</span></div>
+        <div class="bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">02</span></div>
+        <div class="bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">03</span></div>
+        <div class="bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">04</span></div>
+        <div class="hidden md:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">05</span></div>
+        <div class="hidden md:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">06</span></div>
+        <div class="hidden md:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">07</span></div>
+        <div class="hidden md:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="hidden lg:block absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">08</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">09</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">10</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">11</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">12</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">13</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">14</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">15</span></div>
+        <div class="hidden lg:block bg-[#FF4D79]/[0.06] border-x border-[#FF4D79]/20 h-full relative"><span class="absolute top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#FF4D79]/75">16</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Figma Redline Hover Tooltip (Visible in Blueprint Mode) -->
+  <div
+    id="figma-tooltip"
+    class="fixed z-[95] pointer-events-none hidden bg-[#09090B]/95 border border-[#FF4D79] rounded-md px-3 py-2 shadow-2xl font-mono text-[10px] leading-relaxed text-[#F3F1ED] max-w-[270px]"
+  ></div>
+
+  <!-- ===================================================================== -->
+  <!-- PERIMETER ARCHITECTURAL HUD (No Standard Top Navbar!)                 -->
+  <!-- ===================================================================== -->
+
+  <!-- Top-Left Perimeter Brand Stamp -->
+  <div class="fixed top-4 left-4 sm:top-6 sm:left-6 z-[70] flex items-center gap-3 pointer-events-auto">
+    <a
+      href="#act-1"
+      class="group flex items-baseline gap-2.5 bg-[#09090B]/80 backdrop-blur-md border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] px-3.5 py-2 rounded-sm transition-colors"
+    >
+      <span class="font-serif italic font-black text-[18px] tracking-[0.08em] text-[#FF4D79] skew-bomnal inline-block">
+        BOMNAL
+      </span>
+      <span class="hidden sm:inline font-mono text-[9px] tracking-[0.2em] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">
+        ISSUE 04 // EXPERIMENTAL FOLIO
+      </span>
+    </a>
+  </div>
+
+  <!-- Top-Right Perimeter Interactive Mode Toggles -->
+  <div class="fixed top-4 right-4 sm:top-6 sm:right-6 z-[70] flex items-center gap-1.5 sm:gap-2 bg-[#09090B]/85 backdrop-blur-md border border-[rgba(243,241,237,0.12)] p-1 rounded-sm">
+    <button
+      id="btn-xray"
+      type="button"
+      class="px-2.5 sm:px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] text-[#F3F1ED] hover:text-[#FF4D79] transition-colors rounded-sm"
+      title="Toggle 16-Col Figma Blueprint & Redline Inspector (G)"
+    >
+      [X-RAY GRID]
+    </button>
+    <span class="w-[1px] h-3.5 bg-[rgba(243,241,237,0.15)]"></span>
+    <button
+      id="btn-specs"
+      type="button"
+      class="px-2.5 sm:px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] text-[#F3F1ED] hover:text-[#FF4D79] transition-colors rounded-sm"
+      title="Open Figma Specs & Design Tokens (T)"
+    >
+      [SPECS]
+    </button>
+    <span class="hidden md:inline-block w-[1px] h-3.5 bg-[rgba(243,241,237,0.15)]"></span>
+    <button
+      id="btn-canvas"
+      type="button"
+      class="hidden md:inline-block px-2.5 sm:px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] text-[#38BDF8] hover:bg-[#38BDF8]/10 transition-colors rounded-sm"
+      title="Jump to Act IV Interactive Light Table"
+    >
+      [FREEFORM CANVAS]
+    </button>
+  </div>
+
+  <!-- Left-Edge Vertical Rotated Hangul Index + Chapter Seismograph -->
+  <aside
+    aria-label="Act Seismograph Navigation"
+    class="fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-[65] hidden md:flex flex-col items-start gap-5"
+  >
+    <div class="vertical-upright font-kr text-[11px] tracking-[0.3em] text-[#8A8782]/70 select-none pl-0.5">
+      봄날의 기록
+    </div>
+
+    <div class="w-[1px] h-6 bg-[rgba(243,241,237,0.16)] ml-1.5"></div>
+
+    <!-- Non-Linear Interactive Chapter Seismograph -->
+    <nav class="flex flex-col gap-2.5" aria-label="Acts">
+      <button data-jump="act-1" class="seismo-btn group flex items-center gap-2 py-0.5 text-left" title="ACT I: The Shattered Spread">
+        <span class="seismo-bar h-[2px] w-7 bg-[#FF4D79] block"></span>
+        <span class="font-mono text-[9px] text-[#FF4D79] opacity-100 group-hover:opacity-100 transition-opacity">I</span>
+      </button>
+      <button data-jump="act-2" class="seismo-btn group flex items-center gap-2 py-0.5 text-left" title="ACT II: Diagonal Staircase Essay">
+        <span class="seismo-bar h-[2px] w-3 bg-[#8A8782]/50 group-hover:bg-[#F3F1ED] block"></span>
+        <span class="font-mono text-[9px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">II</span>
+      </button>
+      <button data-jump="act-3" class="seismo-btn group flex items-center gap-2 py-0.5 text-left" title="ACT III: Dual-Reality X-Ray Curtain">
+        <span class="seismo-bar h-[2px] w-5 bg-[#8A8782]/50 group-hover:bg-[#F3F1ED] block"></span>
+        <span class="font-mono text-[9px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">III</span>
+      </button>
+      <button data-jump="act-4" class="seismo-btn group flex items-center gap-2 py-0.5 text-left" title="ACT IV: The Designer's Light Table">
+        <span class="seismo-bar h-[2px] w-2.5 bg-[#8A8782]/50 group-hover:bg-[#F3F1ED] block"></span>
+        <span class="font-mono text-[9px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">IV</span>
+      </button>
+      <button data-jump="act-5" class="seismo-btn group flex items-center gap-2 py-0.5 text-left" title="ACT V: Index of Night">
+        <span class="seismo-bar h-[2px] w-4 bg-[#8A8782]/50 group-hover:bg-[#F3F1ED] block"></span>
+        <span class="font-mono text-[9px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">V</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Bottom-Edge Live Coordinate Telemetry Strip -->
+  <div class="fixed bottom-0 inset-x-0 z-[70] h-9 bg-[#09090B]/90 backdrop-blur-md border-t border-[rgba(243,241,237,0.12)] px-4 sm:px-6 flex items-center justify-between font-mono text-[9px] sm:text-[10px] tracking-[0.16em] text-[#8A8782]">
+    <div class="flex items-center gap-3">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#FF4D79] animate-pulse"></span>
+      <span id="hud-coords" class="text-[#F3F1ED]">37.5665° N · 126.9780° E</span>
+    </div>
+
+    <div class="hidden sm:flex items-center gap-2 text-[#F3F1ED]">
+      <span class="text-[#FF4D79]">//</span>
+      <span id="hud-act">ACT I — THE SHATTERED SPREAD</span>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <span id="hud-depth" class="text-[#F3F1ED]">0000 PX</span>
+      <span class="hidden md:inline text-[#8A8782]">PRESS [G] GRID · [T] SPECS</span>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- ACT I — THE SHATTERED SPREAD (Deconstructed Spatial Opening)          -->
+  <!-- ===================================================================== -->
+  <section
+    id="act-1"
+    data-act="ACT I — THE SHATTERED SPREAD"
+    data-coord="37.5665° N · 126.9780° E"
+    class="relative min-h-screen w-full overflow-hidden border-b border-[rgba(243,241,237,0.12)] pt-24 pb-24 flex flex-col justify-between"
+  >
+    <!-- Monumental Ghosted Hangul Spanning Background -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none select-none absolute inset-0 flex items-center justify-center overflow-hidden z-0"
+    >
+      <span class="font-kr font-black text-[44vw] lg:text-[36vw] leading-none text-[#F3F1ED]/[0.04] tracking-tighter -translate-y-6">
+        봄날
+      </span>
+    </div>
+
+    <!-- Asymmetric 1px Neon-Pink Vertical Axis at 38% Width -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute top-0 bottom-0 left-[38%] w-[1px] bg-gradient-to-b from-transparent via-[#FF4D79]/75 to-transparent z-10"
+    >
+      <span class="absolute top-24 left-2 font-mono text-[9px] tracking-[0.2em] text-[#FF4D79] whitespace-nowrap">
+        AXIS 38% // GOLDEN CUT
+      </span>
+    </div>
+
+    <!-- Floating Architectural Blueprint Stamps -->
+    <div class="relative z-20 w-full px-6 md:px-14 lg:px-[48px] flex flex-wrap justify-between items-start gap-4 mt-4">
+      <div
+        data-figma="Blueprint Stamp | Cols 1-3"
+        class="font-mono text-[10px] tracking-[0.22em] text-[#8A8782] space-y-1 border-l border-[#FF4D79] pl-3"
+      >
+        <div class="text-[#FF4D79]">FIG. 00 // NOCTURNE</div>
+        <div>02:14 AM KST</div>
+        <div>EULJIRO-3GA, SEOUL</div>
+      </div>
+
+      <div
+        data-figma="Folio Abstract | Cols 12-16"
+        class="max-w-[280px] text-right font-mono text-[10px] leading-relaxed text-[#8A8782]"
+      >
+        <span class="text-[#F3F1ED]">ANTI-TEMPLATE LONGREAD</span><br />
+        DECONSTRUCTING NEON VELOCITY &amp; JOSEON NEGATIVE SPACE ACROSS FIVE SPATIAL ACTS.
+      </div>
+    </div>
+
+    <!-- Shattered 3-Layer Spatial Composition -->
+    <div class="relative z-20 w-full px-4 md:px-12 lg:px-[48px] my-10 lg:my-6">
+      <div class="grid-16 items-center relative">
+
+        <!-- Layer 1 (Back-Left): "SEOUL," -->
+        <div class="col-span-4 md:col-span-6 lg:col-span-7 lg:col-start-2 z-10">
+          <h1
+            data-figma="Hero Fragment 01 | Cols 2-8"
+            class="font-display font-bold text-[16vw] sm:text-[13vw] lg:text-[10.5vw] leading-[0.82] tracking-[-0.03em] text-[#F3F1ED] select-none"
+          >
+            SEOUL,
+          </h1>
+        </div>
+
+        <!-- Layer 2 (Mid-Right Photographic Plate cut by 38% Axis) -->
+        <div class="col-span-4 md:col-span-6 md:col-start-3 lg:col-span-8 lg:col-start-6 -mt-6 sm:-mt-12 lg:-mt-20 z-20 relative">
+          <div
+            data-figma="Hero Nocturnal Plate | Cols 6-13"
+            class="relative overflow-hidden border border-[rgba(243,241,237,0.16)] bg-[#121216] shadow-[0_30px_90px_rgba(0,0,0,0.85)]"
+            style="background-image: radial-gradient(circle at 25% 25%, rgba(255,77,121,0.22), transparent 55%), radial-gradient(circle at 80% 75%, rgba(56,189,248,0.18), transparent 50%);"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=1600&q=85"
+              alt="Rain-slicked nocturnal Seoul neon alleyway"
+              onerror="this.style.opacity='0'"
+              class="w-full h-[290px] sm:h-[400px] lg:h-[460px] object-cover contrast-110 brightness-90"
+            />
+            <!-- Technical Crosshair Marks on Image -->
+            <span class="absolute top-3 left-3 font-mono text-[9px] text-[#F3F1ED]/80 bg-[#09090B]/70 px-2 py-0.5 border border-[rgba(243,241,237,0.15)]">
+              35MM // ISO 3200
+            </span>
+            <span class="absolute bottom-3 right-3 font-mono text-[9px] text-[#38BDF8] bg-[#09090B]/75 px-2 py-0.5">
+              EULJIRO-3GA
+            </span>
+          </div>
+        </div>
+
+        <!-- Layer 3 (Front-Overlapping Blend-Mode Difference Typography): "IN fragments." -->
+        <div class="col-span-4 md:col-span-8 lg:col-span-12 lg:col-start-3 -mt-16 sm:-mt-24 lg:-mt-32 z-30 pointer-events-none">
+          <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
+            <span
+              data-figma="Hero Fragment 02 | Blend Mode"
+              class="font-mono text-[13px] sm:text-[16px] tracking-[0.42em] text-[#F3F1ED] uppercase bg-[#09090B]/80 px-3 py-1 self-start border border-[rgba(243,241,237,0.15)]"
+            >
+              IN
+            </span>
+            <span
+              data-figma="Hero Fragment 03 | Difference Pink"
+              class="font-display italic font-bold text-[18vw] sm:text-[14vw] lg:text-[12vw] leading-[0.8] text-[#FF4D79] blend-diff tracking-[-0.02em]"
+            >
+              fragments.
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Spatial Cue -->
+    <div class="relative z-20 w-full px-6 md:px-14 lg:px-[48px] flex items-end justify-between">
+      <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A8782]">
+        CURATOR: MIN-JUN YANG <span class="text-[#FF4D79] mx-2">/</span> PHOTOGRAPHY: SEO-YEON PARK
+      </div>
+      <a
+        href="#act-2"
+        class="font-mono text-[10px] tracking-[0.22em] text-[#F3F1ED] hover:text-[#FF4D79] transition-colors flex items-center gap-2"
+      >
+        <span>ENTER ACT II</span>
+        <span class="text-[#FF4D79]">↓</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- ACT II — DIAGONAL STAIRCASE ESSAY (16-Col Non-Linear Cascading Grid)  -->
+  <!-- ===================================================================== -->
+  <section
+    id="act-2"
+    data-act="ACT II — DIAGONAL STAIRCASE ESSAY"
+    data-coord="37.5663° N · 126.9910° E"
+    class="relative py-28 lg:py-36 border-b border-[rgba(243,241,237,0.12)] overflow-hidden"
+  >
+    <!-- Ghosted Hangul Backdrop -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none select-none absolute top-12 right-6 font-kr font-black text-[20vw] leading-none text-[#F3F1ED]/[0.035] z-0"
+    >
+      여백
+    </div>
+
+    <div class="relative z-10 w-full px-6 md:px-14 lg:px-[48px]">
+      <!-- Act Header -->
+      <div class="grid-16 mb-16 lg:mb-24 reveal">
+        <div class="col-span-4 md:col-span-8 lg:col-span-14 lg:col-start-2 flex flex-wrap items-baseline justify-between border-b border-[rgba(243,241,237,0.14)] pb-4 gap-4">
+          <div class="flex items-baseline gap-4">
+            <span class="font-mono text-[10px] tracking-[0.26em] text-[#FF4D79]">ACT II</span>
+            <h2
+              data-figma="Act II Title | Display 44px"
+              class="font-display font-bold text-[34px] sm:text-[46px] leading-none text-[#F3F1ED]"
+            >
+              Diagonal Staircase Essay
+            </h2>
+          </div>
+          <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A8782]">
+            CLICK PINK TERMS FOR ARCHITECTURAL MARGINALIA
+          </span>
+        </div>
+      </div>
+
+      <!-- STEP 1: Far-Left Block (Cols 2–6) + Hairline SVG Connector + Floating Marginalia Plate (Cols 10–15) -->
+      <div class="grid-16 items-start relative mb-12 lg:mb-0">
+        <!-- Paragraph Block 1: Far-Left (Cols 2–6) -->
+        <div
+          data-figma="Cascade Block 01 | Cols 2-6"
+          class="col-span-4 md:col-span-6 lg:col-span-5 lg:col-start-2 reveal"
+        >
+          <span class="font-mono text-[9px] tracking-[0.22em] text-[#FF4D79] block mb-3">01 // COLS 02—06</span>
+          <p class="font-sans font-light text-[16px] sm:text-[17px] leading-[1.85] text-[#F3F1ED]/90">
+            At two-fourteen in the morning, Seoul abandons the grid. Down inside the narrow hardware lanes of
+            <button type="button" data-marg="euljiro" class="marginalia-trigger font-medium cursor-pointer">Euljiro Neon</button>,
+            rain doubles every acrylic signboard onto wet granite pavers. The street ceases to be a corridor and becomes a vertical gallery of reflected Hangul—simultaneously industrial, intimate, and weightless.
+          </p>
+
+          <!-- Inline Expandable Footnote Container for Mobile/Desktop -->
+          <div id="inline-marg-euljiro" class="hidden mt-4 p-4 bg-[#121216] border-l-2 border-[#FF4D79] font-mono text-[11px] leading-relaxed text-[#8A8782]">
+            <div class="text-[#FF4D79] mb-1">NOTE 01 // 37.5663° N, 126.9910° E</div>
+            1960s printmakers &amp; metal workshops layered beneath cantilevered 6500K LED &amp; neon brackets. Pedestrians walk beneath a ceiling of pure typography.
+          </div>
+        </div>
+
+        <!-- Delicate Hairline Diagonal SVG Coordinate Connector (Desktop Only) -->
+        <div aria-hidden="true" class="hidden lg:block lg:col-span-3 lg:col-start-7 pt-10 pointer-events-none">
+          <svg viewBox="0 0 220 150" class="w-full h-36 overflow-visible">
+            <line x1="0" y1="18" x2="220" y2="132" stroke="rgba(255,77,121,0.55)" stroke-width="1" stroke-dasharray="4 4" />
+            <circle cx="0" cy="18" r="3" fill="#FF4D79" />
+            <circle cx="220" cy="132" r="3" fill="#38BDF8" />
+            <text x="72" y="64" fill="#8A8782" font-family="JetBrains Mono" font-size="9" letter-spacing="2">Δ +420PX</text>
+          </svg>
+        </div>
+
+        <!-- Floating Illuminated Side-Plate (Updates dynamically when clicking any marginalia term) -->
+        <aside
+          id="marginalia-plate"
+          data-figma="Marginalia Side Plate | Cols 11-15"
+          class="col-span-4 md:col-span-6 lg:col-span-5 lg:col-start-11 mt-8 lg:mt-0 bg-[#121216] border border-[rgba(243,241,237,0.14)] p-4 sm:p-5 transition-all duration-500 reveal"
+        >
+          <div class="flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-[#FF4D79] mb-3">
+            <span id="mp-tag">MARGINALIA // ACTIVE PLATE</span>
+            <span id="mp-coord" class="text-[#38BDF8]">37.5663° N · 126.9910° E</span>
+          </div>
+          <div class="relative overflow-hidden border border-[rgba(243,241,237,0.1)] mb-3 bg-[#09090B]">
+            <img
+              id="mp-img"
+              src="https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=900&q=80"
+              alt="Architectural Marginalia Plate"
+              onerror="this.style.opacity='0'"
+              class="w-full h-[180px] object-cover transition-opacity duration-300"
+            />
+          </div>
+          <h3 id="mp-title" class="font-display italic font-semibold text-[22px] text-[#F3F1ED]">
+            Euljiro Neon Canopy
+          </h3>
+          <p id="mp-desc" class="font-sans text-[12.5px] leading-relaxed text-[#8A8782] mt-1">
+            Cantilevered acrylic lightboxes act as nocturnal eaves, compressing narrow print-district alleys into glowing interior rooms.
+          </p>
+        </aside>
+      </div>
+
+      <!-- STEP 2: Far-Right Cascading Block (Cols 10–15) -->
+      <div class="grid-16 mt-12 lg:mt-16 mb-16 lg:mb-24">
+        <div
+          data-figma="Cascade Block 02 | Cols 10-15"
+          class="col-span-4 md:col-span-6 md:col-start-3 lg:col-span-6 lg:col-start-10 reveal"
+        >
+          <span class="font-mono text-[9px] tracking-[0.22em] text-[#38BDF8] block mb-3">02 // COLS 10—15</span>
+          <p class="font-sans font-light text-[16px] sm:text-[17px] leading-[1.85] text-[#F3F1ED]/90">
+            Yet walk twenty minutes north toward the quiet timber ridges of Bukchon, and you encounter the exact same spatial grammar rendered in shadow instead of voltage. Inside a
+            <button type="button" data-marg="hanok" class="marginalia-trigger font-medium cursor-pointer">Hanok Courtyard</button>,
+            the upturned wooden eaves (<em class="font-display italic text-[19px] text-[#F3F1ED]">cheoma</em>) slice the night sky with mathematical restraint, borrowing the distant mountain silhouette as a fourth wall.
+          </p>
+
+          <div id="inline-marg-hanok" class="hidden mt-4 p-4 bg-[#121216] border-l-2 border-[#38BDF8] font-mono text-[11px] leading-relaxed text-[#8A8782]">
+            <div class="text-[#38BDF8] mb-1">NOTE 02 // 37.5826° N, 126.9830° E</div>
+            Madang (courtyard) void acts as an unroofed room—calibrating wind, rain, and seasonal light rather than sealing the city out.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Narrow Vertical Column (Cols 5–8) Flanked by Massive 90° Rotated Pull-Quote -->
+      <div class="grid-16 items-stretch relative">
+        <!-- Massive 90-Degree Rotated Vertical Pull-Quote (Cols 2–4 on Desktop) -->
+        <div class="col-span-4 md:col-span-8 lg:col-span-3 lg:col-start-2 flex items-center lg:justify-end mb-10 lg:mb-0 reveal">
+          <blockquote
+            data-figma="Rotated Pull Quote | 90deg Serif"
+            class="lg:vertical-rl lg:rotate-180 font-display italic font-semibold text-[28px] sm:text-[34px] lg:text-[38px] leading-[1.15] text-[#FF4D79] lg:max-h-[540px] border-l lg:border-l-0 lg:border-r border-[#FF4D79]/40 pl-5 lg:pl-0 lg:pr-5"
+          >
+            “Architecture need not block the season; it can frame the petal as it falls.”
+          </blockquote>
+        </div>
+
+        <!-- Narrow Vertical Reading Column (Cols 5–8) -->
+        <div
+          data-figma="Cascade Block 03 | Cols 5-8"
+          class="col-span-4 md:col-span-6 lg:col-span-4 lg:col-start-5 space-y-6 reveal"
+        >
+          <span class="font-mono text-[9px] tracking-[0.22em] text-[#FF4D79] block">03 // COLS 05—08</span>
+          <p class="font-sans font-light text-[15.5px] leading-[1.9] text-[#F3F1ED]/90">
+            This deliberate embrace of off-axis balance echoes the quiet confidence of the
+            <button type="button" data-marg="moonjar" class="marginalia-trigger font-medium cursor-pointer">Joseon Moon Jar</button>.
+            Thrown in two separate porcelain hemispheres and fused by hand, its slight gravitational lean rejects sterile symmetry in favor of human breath.
+          </p>
+
+          <div id="inline-marg-moonjar" class="hidden p-4 bg-[#121216] border-l-2 border-[#FF4D79] font-mono text-[11px] leading-relaxed text-[#8A8782]">
+            <div class="text-[#FF4D79] mb-1">NOTE 03 // DALHANGARI (달항아리)</div>
+            18th-century white porcelain joined along an imperfect equatorial seam—the philosophical blueprint for Seoul's asymmetric streetscape.
+          </div>
+
+          <p class="font-sans font-light text-[15.5px] leading-[1.9] text-[#8A8782]">
+            Between neon fluorescence and mulberry-paper hush, Seoul refuses to choose a single tense. Both realities occupy the exact same coordinates—waiting only for the viewer to slide the lens.
+          </p>
+        </div>
+
+        <!-- Architectural Micro-Diagram on Far Right (Cols 11–15) -->
+        <div class="col-span-4 md:col-span-8 lg:col-span-5 lg:col-start-11 mt-10 lg:mt-0 flex flex-col justify-end reveal">
+          <div class="border border-[rgba(243,241,237,0.12)] bg-[#121216]/70 p-6 font-mono text-[10px] space-y-4">
+            <div class="flex justify-between text-[#8A8782] border-b border-[rgba(243,241,237,0.1)] pb-2">
+              <span>SPATIAL RATIO</span>
+              <span class="text-[#FF4D79]">ASYMMETRIC 38 : 62</span>
+            </div>
+            <svg viewBox="0 0 320 90" class="w-full h-20">
+              <rect x="2" y="10" width="118" height="70" fill="none" stroke="#FF4D79" stroke-width="1" />
+              <rect x="128" y="10" width="190" height="70" fill="none" stroke="rgba(243,241,237,0.28)" stroke-width="1" stroke-dasharray="3 3" />
+              <circle cx="61" cy="45" r="22" fill="none" stroke="#38BDF8" stroke-width="1" />
+              <line x1="128" y1="80" x2="318" y2="10" stroke="rgba(255,77,121,0.5)" stroke-width="1" />
+              <text x="12" y="25" fill="#FF4D79" font-size="8">YEOBAEK (VOID)</text>
+              <text x="140" y="25" fill="#8A8782" font-size="8">NEON FREQUENCY</text>
+            </svg>
+            <div class="text-[#8A8782] leading-relaxed">
+              Proceed below to physically peel back the two realities occupying the same Seoul frame.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- ACT III — DUAL-REALITY X-RAY CURTAIN (Interactive Split-Lens Spread)  -->
+  <!-- ===================================================================== -->
+  <section
+    id="act-3"
+    data-act="ACT III — DUAL-REALITY X-RAY CURTAIN"
+    data-coord="37.5826° N · 126.9830° E"
+    class="relative py-20 lg:py-28 border-b border-[rgba(243,241,237,0.12)] bg-[#09090B]"
+  >
+    <div class="w-full px-6 md:px-14 lg:px-[48px] mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <span class="font-mono text-[10px] tracking-[0.26em] text-[#FF4D79] block mb-2">ACT III // INTERACTIVE SPLIT-LENS</span>
+        <h2
+          data-figma="Act III Title | X-Ray Curtain"
+          class="font-display font-bold text-[34px] sm:text-[48px] leading-none text-[#F3F1ED]"
+        >
+          Dual-Reality X-Ray Curtain
+        </h2>
+      </div>
+      <div class="font-mono text-[10px] tracking-[0.18em] text-[#8A8782] flex items-center gap-3">
+        <span>DRAG PINK RAZOR HANDLE</span>
+        <span id="curtain-readout" class="text-[#FF4D79] bg-[#121216] border border-[#FF4D79]/40 px-2.5 py-1">50% / 50%</span>
+      </div>
+    </div>
+
+    <!-- Full-Width Split-Lens Canvas -->
+    <div
+      id="xray-stage"
+      data-figma="Dual-Reality Split Canvas | Full Bleed"
+      class="relative w-full h-[580px] sm:h-[640px] lg:h-[700px] overflow-hidden border-y border-[rgba(243,241,237,0.16)] select-none cursor-ew-resize"
+    >
+      <!-- BASE LAYER (RIGHT REALITY: NEON / 네온) -->
+      <div class="absolute inset-0 bg-[#0B060A]">
+        <img
+          src="https://images.unsplash.com/photo-1546874177-9e664107314e?auto=format&fit=crop&w=1800&q=85"
+          alt="Electric nocturnal Seoul neon street"
+          draggable="false"
+          onerror="this.style.opacity='0'"
+          class="w-full h-full object-cover opacity-45 contrast-125 saturate-150"
+        />
+        <div class="absolute inset-0 bg-gradient-to-l from-[#09090B]/90 via-[#190812]/55 to-[#FF4D79]/15"></div>
+
+        <!-- Ghosted Hangul Right -->
+        <div aria-hidden="true" class="absolute right-8 top-10 font-kr font-black text-[22vw] leading-none text-[#FF4D79]/[0.09] pointer-events-none">
+          네온
+        </div>
+
+        <!-- Right Reality Editorial Content -->
+        <div class="absolute inset-0 flex items-center justify-end px-6 sm:px-14 lg:px-20">
+          <div class="max-w-md text-right space-y-5">
+            <span class="inline-block font-mono text-[10px] tracking-[0.26em] text-[#38BDF8] border border-[#38BDF8]/40 bg-[#09090B]/70 px-3 py-1">
+              REALITY B // NEON · 네온
+            </span>
+            <h3 class="font-mono font-medium text-[26px] sm:text-[36px] leading-[1.1] tracking-tight text-[#F3F1ED]">
+              6500K RAIN &amp;<br />
+              <span class="font-display italic font-bold text-[#FF4D79] text-[36px] sm:text-[48px]">Midnight Tempo</span>
+            </h3>
+            <p class="font-mono text-[12px] sm:text-[13px] leading-[1.85] text-[#F3F1ED]/85">
+              Fluorescent tubes hum above wet asphalt. Signage stacks vertically until the sky disappears into magenta haze—an electric ecosystem where typography replaces masonry.
+            </p>
+            <div class="font-mono text-[10px] tracking-[0.2em] text-[#FF4D79]">
+              EULJIRO-3GA // 02:14 AM // 84 dB
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OVERLAY LAYER (LEFT REALITY: TRADITION / 여백) — Clipped Dynamically -->
+      <div
+        id="xray-left-layer"
+        class="absolute inset-0 bg-[#0D0C0B]"
+        style="clip-path: inset(0 50% 0 0);"
+      >
+        <img
+          src="https://images.unsplash.com/photo-1583167617240-1b4d8e5f9f27?auto=format&fit=crop&w=1800&q=85"
+          alt="Serene Bukchon Neo-Hanok courtyard at dusk"
+          draggable="false"
+          onerror="this.style.opacity='0'"
+          class="w-full h-full object-cover opacity-50 sepia-[0.15] contrast-105"
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-[#09090B]/92 via-[#0D0C0B]/60 to-transparent"></div>
+
+        <!-- Ghosted Hangul Left -->
+        <div aria-hidden="true" class="absolute left-8 bottom-8 font-kr font-black text-[22vw] leading-none text-[#F3F1ED]/[0.06] pointer-events-none">
+          여백
+        </div>
+
+        <!-- Left Reality Editorial Content -->
+        <div class="absolute inset-0 flex items-center justify-start px-6 sm:px-14 lg:px-20">
+          <div class="max-w-md text-left space-y-5">
+            <span class="inline-block font-mono text-[10px] tracking-[0.26em] text-[#F3F1ED] border border-[rgba(243,241,237,0.25)] bg-[#09090B]/70 px-3 py-1">
+              REALITY A // TRADITION · 여백
+            </span>
+            <h3 class="font-display font-bold text-[34px] sm:text-[48px] leading-[1.02] text-[#F3F1ED]">
+              Emptiness, Pine<br />
+              <span class="italic font-normal text-[#F3F1ED]/75">&amp; Paper Screens</span>
+            </h3>
+            <p class="font-sans font-light text-[14px] sm:text-[15.5px] leading-[1.85] text-[#F3F1ED]/85">
+              Unvarnished timber joinery holds silence like a porcelain vessel. Hanji lattice softens the lantern into warm amber, leaving generous negative space for wind and falling cherry petals.
+            </p>
+            <div class="font-mono text-[10px] tracking-[0.2em] text-[#8A8782]">
+              BUKCHON HANOK // 21:40 PM // 28 dB
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DRAGGABLE VERTICAL NEON-PINK RAZOR HANDLE -->
+      <div
+        id="xray-handle"
+        role="slider"
+        aria-label="Slide to compare Tradition and Neon realities"
+        aria-valuemin="5"
+        aria-valuemax="95"
+        aria-valuenow="50"
+        tabindex="0"
+        class="absolute top-0 bottom-0 z-30 w-[2px] bg-[#FF4D79] shadow-[0_0_24px_rgba(255,77,121,0.95)] cursor-ew-resize"
+        style="left: 50%;"
+      >
+        <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-[#09090B] border-2 border-[#FF4D79] flex items-center justify-center shadow-[0_0_30px_rgba(255,77,121,0.5)]">
+          <span class="font-mono text-[11px] text-[#FF4D79] tracking-tighter">◄►</span>
+        </div>
+        <div class="absolute top-4 -translate-x-1/2 bg-[#FF4D79] text-[#09090B] font-mono font-medium text-[9px] px-2 py-0.5 whitespace-nowrap">
+          X-RAY LENS
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- ACT IV — THE DESIGNER'S LIGHT TABLE (Draggable Spatial Collage Board) -->
+  <!-- ===================================================================== -->
+  <section
+    id="act-4"
+    data-act="ACT IV — THE DESIGNER'S LIGHT TABLE"
+    data-coord="37.5445° N · 127.0560° E"
+    class="relative min-h-[95vh] py-20 lg:py-24 border-b border-[rgba(243,241,237,0.12)] light-table-bg overflow-hidden"
+  >
+    <!-- Top Artboard Toolbar -->
+    <div class="relative z-30 w-full px-6 md:px-14 lg:px-[48px] mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <span class="font-mono text-[10px] tracking-[0.26em] text-[#38BDF8] block mb-1.5">ACT IV // FIGMA SPATIAL ARTBOARD</span>
+        <h2
+          data-figma="Act IV Title | Light Table"
+          class="font-display font-bold text-[34px] sm:text-[46px] leading-none text-[#F3F1ED]"
+        >
+          The Designer’s Light Table
+        </h2>
+        <p class="font-mono text-[11px] text-[#8A8782] mt-2">
+          DRAG ANY PLATE TO COMPOSE YOUR OWN EDITORIAL SPREAD · CLICK TO BRING TO FRONT
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button
+          id="btn-cascade"
+          type="button"
+          class="px-4 py-2 bg-[#FF4D79] hover:bg-[#ff658b] text-[#09090B] font-mono font-medium text-[10px] tracking-[0.16em] transition-colors"
+        >
+          [CASCADE LAYOUT]
+        </button>
+        <button
+          id="btn-reset-spread"
+          type="button"
+          class="px-4 py-2 bg-[#121216] hover:border-[#FF4D79] border border-[rgba(243,241,237,0.2)] text-[#F3F1ED] font-mono text-[10px] tracking-[0.16em] transition-colors"
+        >
+          [RESET SPREAD]
+        </button>
+      </div>
+    </div>
+
+    <!-- Interactive Freeform Collage Canvas -->
+    <div
+      id="light-table-canvas"
+      class="relative w-full h-[640px] sm:h-[700px] lg:h-[740px] mx-auto overflow-hidden border-y border-[rgba(243,241,237,0.1)]"
+    >
+      <!-- Artboard Corner Marks -->
+      <span class="absolute top-3 left-4 font-mono text-[9px] text-[#8A8782]/60 pointer-events-none">ARTBOARD 04 // 1440×740</span>
+      <span id="drag-telemetry" class="absolute top-3 right-4 font-mono text-[9px] text-[#38BDF8] pointer-events-none">X: 000 · Y: 000</span>
+
+      <!-- ARTIFACT 01: Nocturnal Seoul Neon Plate -->
+      <article
+        data-plate="1"
+        data-figma="Artifact 01 | Photo Plate"
+        class="collage-plate absolute w-[220px] sm:w-[290px] bg-[#121216] border border-[rgba(243,241,237,0.2)] p-2.5 shadow-[0_24px_60px_rgba(0,0,0,0.8)] cursor-grab active:cursor-grabbing"
+        style="left: 7%; top: 9%; transform: rotate(-2.5deg); z-index: 12;"
+      >
+        <div class="flex justify-between font-mono text-[8px] text-[#8A8782] mb-1.5">
+          <span>PLATE 01 // EULJIRO</span>
+          <span class="text-[#FF4D79]">DRAG</span>
+        </div>
+        <div class="bg-[#09090B] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=800&q=80"
+            alt="Seoul neon alley plate"
+            draggable="false"
+            onerror="this.style.opacity='0'"
+            class="w-full h-[180px] sm:h-[230px] object-cover"
+          />
+        </div>
+        <div class="mt-2 font-mono text-[9px] text-[#F3F1ED]">RAIN REFLECTION // 23:14</div>
+      </article>
+
+      <!-- ARTIFACT 02: Cherry Blossom Night Plate -->
+      <article
+        data-plate="2"
+        data-figma="Artifact 02 | Blossom Plate"
+        class="collage-plate absolute w-[210px] sm:w-[270px] bg-[#121216] border border-[rgba(243,241,237,0.2)] p-2.5 shadow-[0_24px_60px_rgba(0,0,0,0.8)] cursor-grab active:cursor-grabbing"
+        style="left: 34%; top: 14%; transform: rotate(2deg); z-index: 14;"
+      >
+        <div class="flex justify-between font-mono text-[8px] text-[#8A8782] mb-1.5">
+          <span>PLATE 02 // YEOUIDO</span>
+          <span class="text-[#FF4D79]">DRAG</span>
+        </div>
+        <div class="bg-[#09090B] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=800&q=80"
+            alt="Cherry blossoms illuminated at night"
+            draggable="false"
+            onerror="this.style.opacity='0'"
+            class="w-full h-[170px] sm:h-[210px] object-cover"
+          />
+        </div>
+        <div class="mt-2 font-mono text-[9px] text-[#F3F1ED]">PETAL DRIFT // ISO 1600</div>
+      </article>
+
+      <!-- ARTIFACT 03: Translucent Pink Typographic Specimen Card -->
+      <article
+        data-plate="3"
+        data-figma="Artifact 03 | Pink Specimen Card"
+        class="collage-plate absolute w-[230px] sm:w-[300px] bg-[#FF4D79]/18 backdrop-blur-md border border-[#FF4D79]/70 p-5 shadow-[0_20px_50px_rgba(255,77,121,0.18)] cursor-grab active:cursor-grabbing"
+        style="left: 58%; top: 10%; transform: rotate(-1.5deg); z-index: 16;"
+      >
+        <div class="flex justify-between font-mono text-[8px] text-[#FF4D79] mb-3">
+          <span>SPECIMEN // TYPE 04</span>
+          <span>#FF4D79</span>
+        </div>
+        <div class="font-display italic font-bold text-[42px] sm:text-[54px] leading-[0.88] text-[#F3F1ED] mb-3">
+          Aa Bb
+        </div>
+        <p class="font-serif italic text-[14px] text-[#F3F1ED]/90 leading-snug">
+          “Soft pink reflections gather against timber and glass facades.”
+        </p>
+        <div class="mt-3 pt-2 border-t border-[#FF4D79]/40 font-mono text-[8px] text-[#F3F1ED]/80">
+          CORMORANT GARAMOND · 700 ITALIC
+        </div>
+      </article>
+
+      <!-- ARTIFACT 04: Joseon Moon Jar / Ceramic Plate -->
+      <article
+        data-plate="4"
+        data-figma="Artifact 04 | Ceramic Plate"
+        class="collage-plate absolute w-[200px] sm:w-[250px] bg-[#121216] border border-[rgba(243,241,237,0.2)] p-2.5 shadow-[0_24px_60px_rgba(0,0,0,0.8)] cursor-grab active:cursor-grabbing"
+        style="left: 18%; top: 50%; transform: rotate(3deg); z-index: 15;"
+      >
+        <div class="flex justify-between font-mono text-[8px] text-[#8A8782] mb-1.5">
+          <span>PLATE 04 // DALHANGARI</span>
+          <span class="text-[#38BDF8]">DRAG</span>
+        </div>
+        <div class="bg-[#09090B] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=800&q=80"
+            alt="Minimalist white porcelain vessel"
+            draggable="false"
+            onerror="this.style.opacity='0'"
+            class="w-full h-[165px] sm:h-[200px] object-cover"
+          />
+        </div>
+        <div class="mt-2 font-mono text-[9px] text-[#F3F1ED]">OFF-AXIS ASYMMETRY</div>
+      </article>
+
+      <!-- ARTIFACT 05: Hangul Calligraphy Architectural Plate -->
+      <article
+        data-plate="5"
+        data-figma="Artifact 05 | Hangul Calligraphy"
+        class="collage-plate absolute w-[200px] sm:w-[240px] bg-[#09090B]/95 border border-[rgba(243,241,237,0.25)] p-5 shadow-[0_24px_60px_rgba(0,0,0,0.85)] cursor-grab active:cursor-grabbing"
+        style="left: 62%; top: 48%; transform: rotate(2.5deg); z-index: 13;"
+      >
+        <div class="flex justify-between font-mono text-[8px] text-[#8A8782] mb-2">
+          <span>GLYPH // 05</span>
+          <span class="text-[#FF4D79]">NOTO SERIF KR</span>
+        </div>
+        <div class="font-kr font-black text-[58px] sm:text-[72px] leading-[0.95] text-[#F3F1ED] text-center py-2">
+          빛과<br /><span class="text-[#FF4D79]">그림자</span>
+        </div>
+        <div class="mt-2 text-center font-mono text-[8px] tracking-[0.22em] text-[#8A8782]">
+          LIGHT AND SHADOW // SEOUL
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- ACT V — THE NEIGHBORHOOD MATRIX & TYPING ECLIPSE FINALE               -->
+  <!-- ===================================================================== -->
+  <section
+    id="act-5"
+    data-act="ACT V — INDEX OF NIGHT"
+    data-coord="37.5742° N · 126.9896° E"
+    class="relative pt-24 lg:pt-32 pb-16 bg-[#09090B] overflow-hidden"
+  >
+    <!-- Dynamic Ambient Glow shifting per neighborhood -->
+    <div
+      id="matrix-glow"
+      aria-hidden="true"
+      class="pointer-events-none absolute top-1/4 right-1/4 w-[480px] h-[480px] rounded-full blur-[130px] opacity-20 transition-all duration-700"
+      style="background: #FF4D79;"
+    ></div>
+
+    <!-- Dynamic Monumental Background Hangul -->
+    <div
+      id="matrix-bg-kr"
+      aria-hidden="true"
+      class="pointer-events-none select-none absolute top-10 left-4 font-kr font-black text-[28vw] leading-none text-[#F3F1ED]/[0.04] transition-all duration-500 z-0"
+    >
+      을지로
+    </div>
+
+    <div class="relative z-10 w-full px-6 md:px-14 lg:px-[48px]">
+      <!-- Header -->
+      <div class="flex flex-wrap items-baseline justify-between border-b border-[rgba(243,241,237,0.14)] pb-4 mb-12">
+        <span class="font-mono text-[10px] tracking-[0.26em] text-[#FF4D79]">ACT V // INDEX OF NIGHT</span>
+        <span class="font-mono text-[10px] tracking-[0.2em] text-[#8A8782]">HOVER OR TAP DISTRICT TO MORPH FIELD PLATE</span>
+      </div>
+
+      <!-- Matrix Split: Interactive District List + Morphing Floating Preview Plate -->
+      <div class="grid-16 items-center gap-y-12 mb-28 lg:mb-36">
+        <!-- Typographic District List (Cols 1-9) -->
+        <div class="col-span-4 md:col-span-8 lg:col-span-9 divide-y divide-[rgba(243,241,237,0.12)] border-y border-[rgba(243,241,237,0.12)]">
+          <button
+            type="button"
+            data-district="euljiro"
+            class="district-row w-full py-5 sm:py-6 flex items-baseline justify-between text-left group transition-all"
+          >
+            <span class="flex items-baseline gap-4 sm:gap-7">
+              <span class="font-mono text-[11px] text-[#FF4D79]">01</span>
+              <span class="font-display font-bold text-[38px] sm:text-[58px] lg:text-[68px] leading-none text-[#F3F1ED] group-hover:italic group-hover:text-[#FF4D79] group-hover:translate-x-3 transition-all duration-300">
+                EULJIRO
+              </span>
+            </span>
+            <span class="font-kr text-[16px] sm:text-[20px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">을지로</span>
+          </button>
+
+          <button
+            type="button"
+            data-district="bukchon"
+            class="district-row w-full py-5 sm:py-6 flex items-baseline justify-between text-left group transition-all"
+          >
+            <span class="flex items-baseline gap-4 sm:gap-7">
+              <span class="font-mono text-[11px] text-[#8A8782] group-hover:text-[#FF4D79]">02</span>
+              <span class="font-display font-bold text-[38px] sm:text-[58px] lg:text-[68px] leading-none text-[#8A8782] group-hover:italic group-hover:text-[#FF4D79] group-hover:translate-x-3 transition-all duration-300">
+                BUKCHON
+              </span>
+            </span>
+            <span class="font-kr text-[16px] sm:text-[20px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">북촌</span>
+          </button>
+
+          <button
+            type="button"
+            data-district="seongsu"
+            class="district-row w-full py-5 sm:py-6 flex items-baseline justify-between text-left group transition-all"
+          >
+            <span class="flex items-baseline gap-4 sm:gap-7">
+              <span class="font-mono text-[11px] text-[#8A8782] group-hover:text-[#FF4D79]">03</span>
+              <span class="font-display font-bold text-[38px] sm:text-[58px] lg:text-[68px] leading-none text-[#8A8782] group-hover:italic group-hover:text-[#FF4D79] group-hover:translate-x-3 transition-all duration-300">
+                SEONGSU
+              </span>
+            </span>
+            <span class="font-kr text-[16px] sm:text-[20px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">성수</span>
+          </button>
+
+          <button
+            type="button"
+            data-district="yeouido"
+            class="district-row w-full py-5 sm:py-6 flex items-baseline justify-between text-left group transition-all"
+          >
+            <span class="flex items-baseline gap-4 sm:gap-7">
+              <span class="font-mono text-[11px] text-[#8A8782] group-hover:text-[#FF4D79]">04</span>
+              <span class="font-display font-bold text-[38px] sm:text-[58px] lg:text-[68px] leading-none text-[#8A8782] group-hover:italic group-hover:text-[#FF4D79] group-hover:translate-x-3 transition-all duration-300">
+                YEOUIDO
+              </span>
+            </span>
+            <span class="font-kr text-[16px] sm:text-[20px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">여의도</span>
+          </button>
+
+          <button
+            type="button"
+            data-district="ikseon"
+            class="district-row w-full py-5 sm:py-6 flex items-baseline justify-between text-left group transition-all"
+          >
+            <span class="flex items-baseline gap-4 sm:gap-7">
+              <span class="font-mono text-[11px] text-[#8A8782] group-hover:text-[#FF4D79]">05</span>
+              <span class="font-display font-bold text-[38px] sm:text-[58px] lg:text-[68px] leading-none text-[#8A8782] group-hover:italic group-hover:text-[#FF4D79] group-hover:translate-x-3 transition-all duration-300">
+                IKSEON
+              </span>
+            </span>
+            <span class="font-kr text-[16px] sm:text-[20px] text-[#8A8782] group-hover:text-[#F3F1ED] transition-colors">익선동</span>
+          </button>
+        </div>
+
+        <!-- Floating Asymmetric Preview Plate & Poetic Excerpt (Cols 11-16) -->
+        <div class="col-span-4 md:col-span-8 lg:col-span-6 lg:col-start-11">
+          <div
+            data-figma="District Morph Plate | Cols 11-16"
+            class="bg-[#121216] border border-[rgba(243,241,237,0.16)] p-4 sm:p-6 shadow-2xl"
+          >
+            <div class="flex items-center justify-between font-mono text-[9px] tracking-[0.2em] text-[#FF4D79] mb-3">
+              <span id="dist-code">DISTRICT 01 // EULJIRO</span>
+              <span id="dist-coord" class="text-[#38BDF8]">37.5663° N · 126.9910° E</span>
+            </div>
+            <div class="overflow-hidden bg-[#09090B] border border-[rgba(243,241,237,0.1)] mb-4">
+              <img
+                id="dist-img"
+                src="https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=1000&q=80"
+                alt="District nocturnal preview"
+                onerror="this.style.opacity='0'"
+                class="w-full h-[250px] sm:h-[300px] object-cover transition-all duration-500"
+              />
+            </div>
+            <p id="dist-excerpt" class="font-display italic text-[22px] sm:text-[25px] leading-[1.35] text-[#F3F1ED] mb-3">
+              “Corrugated steel shutters, warm printshop ink, and hidden vinyl bars floating above wet neon granite.”
+            </p>
+            <div id="dist-meta" class="font-mono text-[10px] text-[#8A8782] tracking-[0.16em]">
+              TEMP: 6500K NEON // SOUND: RAIN + PRESSES
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brutalist Architectural Colophon -->
+      <div class="grid-16 border-t border-[rgba(243,241,237,0.14)] pt-8 pb-6 font-mono text-[10px] text-[#8A8782] gap-y-4">
+        <div class="col-span-4 md:col-span-4 lg:col-span-5">
+          <div class="text-[#F3F1ED] mb-1">BOMNAL (봄날) // SEOUL CULTURE JOURNAL</div>
+          <div>EXPERIMENTAL LONGREAD FOLIO · ISSUE 04 · 2026</div>
+        </div>
+        <div class="col-span-4 md:col-span-4 lg:col-span-6">
+          <div class="text-[#F3F1ED] mb-1">FIGMA LAYOUT ARCHITECTURE</div>
+          <div>1440PX ARTBOARD · 16 COLUMNS · 16PX GUTTER · 48PX MARGIN</div>
+        </div>
+        <div class="col-span-4 md:col-span-8 lg:col-span-5 lg:text-right">
+          <div class="text-[#FF4D79] mb-1">PRESS [G] BLUEPRINT · [T] SPECS</div>
+          <div>CRAFTED AS AN ANTI-TEMPLATE REFERENCE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oversized Skewed #FF4D79 BOMNAL Watermark Bleeding Off Bottom Edge -->
+    <div aria-hidden="true" class="w-full overflow-hidden -mb-14 sm:-mb-20 lg:-mb-28 pt-6 select-none pointer-events-none">
+      <div class="font-serif italic font-black text-[23vw] leading-[0.78] tracking-[0.02em] text-[#FF4D79] skew-bomnal text-center whitespace-nowrap">
+        BOMNAL
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- FIGMA SPECS & TOKENS SLIDE-OVER DRAWER (Key: T)                       -->
+  <!-- ===================================================================== -->
+  <aside
+    id="specs-drawer"
+    aria-label="Figma Design System Specs"
+    class="fixed top-0 right-0 bottom-9 z-[92] w-[92vw] sm:w-[400px] bg-[#0D0D10]/96 backdrop-blur-2xl border-l border-[rgba(243,241,237,0.16)] p-6 overflow-y-auto translate-x-full transition-transform duration-300 shadow-2xl"
+  >
+    <div class="flex items-center justify-between pb-4 mb-5 border-b border-[rgba(243,241,237,0.14)]">
+      <div>
+        <span class="font-mono text-[9px] tracking-[0.24em] text-[#FF4D79] block">FIGMA INSPECTOR</span>
+        <h3 class="font-display font-bold text-[24px] text-[#F3F1ED]">BOMNAL Design Tokens</h3>
+      </div>
+      <button
+        id="close-specs"
+        type="button"
+        class="w-8 h-8 border border-[rgba(243,241,237,0.2)] hover:border-[#FF4D79] text-[#F3F1ED] font-mono text-xs flex items-center justify-center"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Color Palette -->
+    <div class="mb-6">
+      <div class="font-mono text-[9px] tracking-[0.22em] text-[#8A8782] uppercase mb-3">
+        Color Tokens (Click to Copy)
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <button type="button" data-copy="#09090B" class="copy-spec flex items-center gap-2.5 p-2 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] text-left">
+          <span class="w-5 h-5 bg-[#09090B] border border-[rgba(243,241,237,0.2)] shrink-0"></span>
+          <span class="font-mono text-[10px]"><span class="block text-[#F3F1ED]">Void</span><span class="text-[#8A8782]">#09090B</span></span>
+        </button>
+        <button type="button" data-copy="#121216" class="copy-spec flex items-center gap-2.5 p-2 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] text-left">
+          <span class="w-5 h-5 bg-[#121216] border border-[rgba(243,241,237,0.2)] shrink-0"></span>
+          <span class="font-mono text-[10px]"><span class="block text-[#F3F1ED]">Surface</span><span class="text-[#8A8782]">#121216</span></span>
+        </button>
+        <button type="button" data-copy="#F3F1ED" class="copy-spec flex items-center gap-2.5 p-2 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] text-left">
+          <span class="w-5 h-5 bg-[#F3F1ED] shrink-0"></span>
+          <span class="font-mono text-[10px]"><span class="block text-[#F3F1ED]">Bone Ink</span><span class="text-[#8A8782]">#F3F1ED</span></span>
+        </button>
+        <button type="button" data-copy="#8A8782" class="copy-spec flex items-center gap-2.5 p-2 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] text-left">
+          <span class="w-5 h-5 bg-[#8A8782] shrink-0"></span>
+          <span class="font-mono text-[10px]"><span class="block text-[#F3F1ED]">Muted</span><span class="text-[#8A8782]">#8A8782</span></span>
+        </button>
+        <button type="button" data-copy="#FF4D79" class="copy-spec flex items-center gap-2.5 p-2 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] text-left">
+          <span class="w-5 h-5 bg-[#FF4D79] shrink-0"></span>
+          <span class="font-mono text-[10px]"><span class="block text-[#F3F1ED]">Blossom</span><span class="text-[#FF4D79]">#FF4D79</span></span>
+        </button>
+        <button type="button" data-copy="#38BDF8" class="copy-spec flex items-center gap-2.5 p-2 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#38BDF8] text-left">
+          <span class="w-5 h-5 bg-[#38BDF8] shrink-0"></span>
+          <span class="font-mono text-[10px]"><span class="block text-[#F3F1ED]">Alley Cyan</span><span class="text-[#38BDF8]">#38BDF8</span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Typography Hierarchy -->
+    <div class="mb-6">
+      <div class="font-mono text-[9px] tracking-[0.22em] text-[#8A8782] uppercase mb-3">
+        Typographic Hierarchy (Click to Copy)
+      </div>
+      <div class="space-y-2">
+        <button type="button" data-copy="font-family: 'Cormorant Garamond', serif; font-weight: 700; font-style: italic; color: #FF4D79;" class="copy-spec w-full p-2.5 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] flex justify-between items-center text-left">
+          <span class="font-display italic font-bold text-[18px] text-[#FF4D79]">Display Editorial</span>
+          <span class="font-mono text-[9px] text-[#8A8782]">Cormorant / 700i</span>
+        </button>
+        <button type="button" data-copy="font-family: 'Noto Serif KR', serif; font-weight: 900; opacity: 0.04;" class="copy-spec w-full p-2.5 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] flex justify-between items-center text-left">
+          <span class="font-kr font-black text-[15px] text-[#F3F1ED]">봄날 Hangul Ghost</span>
+          <span class="font-mono text-[9px] text-[#8A8782]">Noto KR / 900</span>
+        </button>
+        <button type="button" data-copy="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em;" class="copy-spec w-full p-2.5 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] flex justify-between items-center text-left">
+          <span class="font-mono text-[11px] text-[#38BDF8]">TELEMETRY MONO</span>
+          <span class="font-mono text-[9px] text-[#8A8782]">JetBrains / 10px</span>
+        </button>
+        <button type="button" data-copy="font-family: 'Inter', sans-serif; font-weight: 300; font-size: 17px; line-height: 1.85;" class="copy-spec w-full p-2.5 bg-[#121216] border border-[rgba(243,241,237,0.12)] hover:border-[#FF4D79] flex justify-between items-center text-left">
+          <span class="font-sans font-light text-[13px] text-[#F3F1ED]">Essay Body Copy</span>
+          <span class="font-mono text-[9px] text-[#8A8782]">Inter 300 / 17px</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Figma Grid Specification -->
+    <div>
+      <div class="font-mono text-[9px] tracking-[0.22em] text-[#8A8782] uppercase mb-3">
+        16-Column Artboard Grid Spec
+      </div>
+      <div class="bg-[#121216] border border-[rgba(243,241,237,0.12)] p-3.5 font-mono text-[10px] space-y-1.5 text-[#8A8782]">
+        <div class="flex justify-between"><span>Desktop Frame</span><span class="text-[#F3F1ED]">1440px</span></div>
+        <div class="flex justify-between"><span>Columns</span><span class="text-[#FF4D79]">16 (Asymmetric)</span></div>
+        <div class="flex justify-between"><span>Gutter / Margin</span><span class="text-[#F3F1ED]">16px / 48px</span></div>
+        <div class="flex justify-between"><span>Golden Guides</span><span class="text-[#38BDF8]">38.2% · 61.8%</span></div>
+        <div class="flex justify-between"><span>Blend Modes</span><span class="text-[#F3F1ED]">Difference / Exclusion</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Toast Notification -->
+  <div
+    id="toast"
+    role="status"
+    class="fixed bottom-12 right-6 z-[110] bg-[#121216] border border-[#FF4D79] text-[#F3F1ED] font-mono text-[10px] tracking-[0.14em] px-4 py-2 opacity-0 translate-y-2 pointer-events-none transition-all duration-200"
+  >
+    COPIED
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VANILLA JS: INTERACTIVE ACTS, X-RAY CURTAIN, LIGHT TABLE & INSPECTOR  -->
+  <!-- ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // Toast helper
+      const toastEl = document.getElementById('toast');
+      let toastTimer = null;
+      function showToast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.remove('opacity-0', 'translate-y-2');
+        toastEl.classList.add('opacity-100', 'translate-y-0');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toastEl.classList.remove('opacity-100', 'translate-y-0');
+          toastEl.classList.add('opacity-0', 'translate-y-2');
+        }, 2000);
+      }
+
+      // Iframe-safe clipboard copy
+      function copyToClipboard(text) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          showToast('COPIED // ' + text.slice(0, 36));
+        } catch (e) {
+          showToast('SPEC // ' + text.slice(0, 36));
+        }
+      }
+
+      // 1. SCROLL REVEAL OBSERVER
+      const reveals = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        reveals.forEach((el) => obs.observe(el));
+      } else {
+        reveals.forEach((el) => el.classList.add('is-visible'));
+      }
+
+      // 2. PERIMETER HUD TELEMETRY & SEISMOGRAPH NAVIGATION
+      const hudAct = document.getElementById('hud-act');
+      const hudCoords = document.getElementById('hud-coords');
+      const hudDepth = document.getElementById('hud-depth');
+      const actSections = document.querySelectorAll('section[data-act]');
+      const seismoBtns = document.querySelectorAll('.seismo-btn');
+
+      seismoBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.getAttribute('data-jump'));
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      document.getElementById('btn-canvas').addEventListener('click', () => {
+        const act4 = document.getElementById('act-4');
+        if (act4) act4.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      function updateTelemetry() {
+        const y = Math.round(window.scrollY);
+        hudDepth.textContent = String(y).padStart(4, '0') + ' PX';
+
+        let activeId = 'act-1';
+        actSections.forEach((sec) => {
+          const rect = sec.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.45) {
+            activeId = sec.id;
+            hudAct.textContent = sec.getAttribute('data-act');
+            hudCoords.textContent = sec.getAttribute('data-coord');
+          }
+        });
+
+        seismoBtns.forEach((btn) => {
+          const isMatch = btn.getAttribute('data-jump') === activeId;
+          const bar = btn.querySelector('.seismo-bar');
+          const label = btn.querySelector('span:last-child');
+          if (isMatch) {
+            bar.style.width = '28px';
+            bar.style.backgroundColor = '#FF4D79';
+            label.style.color = '#FF4D79';
+          } else {
+            bar.style.width = '12px';
+            bar.style.backgroundColor = 'rgba(138, 135, 130, 0.45)';
+            label.style.color = '#8A8782';
+          }
+        });
+      }
+      window.addEventListener('scroll', updateTelemetry, { passive: true });
+      updateTelemetry();
+
+      // 3. ACT II INTERACTIVE MARGINALIA
+      const marginaliaData = {
+        euljiro: {
+          tag: 'MARGINALIA 01 // EULJIRO NEON',
+          coord: '37.5663° N · 126.9910° E',
+          title: 'Euljiro Neon Canopy',
+          desc: 'Cantilevered acrylic lightboxes act as nocturnal eaves, compressing narrow print-district alleys into glowing interior rooms.',
+          img: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=900&q=80',
+        },
+        hanok: {
+          tag: 'MARGINALIA 02 // HANOK COURTYARD',
+          coord: '37.5826° N · 126.9830° E',
+          title: 'Bukchon Cheoma & Madang',
+          desc: 'Curved timber eaves calibrate seasonal sun angles while the open courtyard frames sky and mountain ridges as living architecture.',
+          img: 'https://images.unsplash.com/photo-1583167617240-1b4d8e5f9f27?auto=format&fit=crop&w=900&q=80',
+        },
+        moonjar: {
+          tag: 'MARGINALIA 03 // JOSEON MOON JAR',
+          coord: '37.5796° N · 126.9770° E',
+          title: 'Dalhangari Asymmetry',
+          desc: 'Two thrown porcelain hemispheres fused imperfectly along an equatorial seam—celebrating organic gravity over rigid symmetry.',
+          img: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=900&q=80',
+        },
+      };
+
+      const mpPlate = document.getElementById('marginalia-plate');
+      const mpTag = document.getElementById('mp-tag');
+      const mpCoord = document.getElementById('mp-coord');
+      const mpTitle = document.getElementById('mp-title');
+      const mpDesc = document.getElementById('mp-desc');
+      const mpImg = document.getElementById('mp-img');
+
+      document.querySelectorAll('.marginalia-trigger').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-marg');
+          const data = marginaliaData[key];
+          if (!data) return;
+
+          // Toggle inline architectural footnote
+          const inlineBox = document.getElementById('inline-marg-' + key);
+          if (inlineBox) {
+            const isHidden = inlineBox.classList.toggle('hidden');
+            btn.classList.toggle('is-open', !isHidden);
+          }
+
+          // Illuminate floating side plate
+          mpTag.textContent = data.tag;
+          mpCoord.textContent = data.coord;
+          mpTitle.textContent = data.title;
+          mpDesc.textContent = data.desc;
+          mpImg.style.opacity = '0.3';
+          mpImg.src = data.img;
+          mpImg.onload = () => { mpImg.style.opacity = '1'; };
+
+          mpPlate.style.borderColor = '#FF4D79';
+          setTimeout(() => { mpPlate.style.borderColor = 'rgba(243,241,237,0.14)'; }, 900);
+        });
+      });
+
+      // 4. ACT III DUAL-REALITY X-RAY CURTAIN (Mouse + Touch + Click + Keyboard)
+      const xrayStage = document.getElementById('xray-stage');
+      const xrayLeft = document.getElementById('xray-left-layer');
+      const xrayHandle = document.getElementById('xray-handle');
+      const curtainReadout = document.getElementById('curtain-readout');
+      let curtainPercent = 50;
+      let isSliding = false;
+
+      function setCurtain(pct) {
+        curtainPercent = Math.min(95, Math.max(5, pct));
+        xrayLeft.style.clipPath = `inset(0 ${(100 - curtainPercent).toFixed(2)}% 0 0)`;
+        xrayHandle.style.left = `${curtainPercent.toFixed(2)}%`;
+        xrayHandle.setAttribute('aria-valuenow', Math.round(curtainPercent));
+        curtainReadout.textContent = `${Math.round(curtainPercent)}% / ${100 - Math.round(curtainPercent)}%`;
+      }
+
+      function updateCurtainFromClientX(clientX) {
+        const rect = xrayStage.getBoundingClientRect();
+        const pct = ((clientX - rect.left) / rect.width) * 100;
+        setCurtain(pct);
+      }
+
+      xrayStage.addEventListener('mousedown', (e) => {
+        isSliding = true;
+        updateCurtainFromClientX(e.clientX);
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isSliding) return;
+        updateCurtainFromClientX(e.clientX);
+      });
+      window.addEventListener('mouseup', () => { isSliding = false; });
+
+      xrayStage.addEventListener('touchstart', (e) => {
+        isSliding = true;
+        if (e.touches[0]) updateCurtainFromClientX(e.touches[0].clientX);
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (!isSliding || !e.touches[0]) return;
+        updateCurtainFromClientX(e.touches[0].clientX);
+      }, { passive: true });
+      window.addEventListener('touchend', () => { isSliding = false; });
+
+      xrayHandle.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') setCurtain(curtainPercent - 4);
+        if (e.key === 'ArrowRight') setCurtain(curtainPercent + 4);
+      });
+
+      // 5. ACT IV THE DESIGNER'S LIGHT TABLE (Draggable Collage Artifacts)
+      const ltCanvas = document.getElementById('light-table-canvas');
+      const plates = document.querySelectorAll('.collage-plate');
+      const dragTelemetry = document.getElementById('drag-telemetry');
+      let topZ = 20;
+
+      const initialPositions = [
+        { left: '7%', top: '9%', rot: '-2.5deg' },
+        { left: '34%', top: '14%', rot: '2deg' },
+        { left: '58%', top: '10%', rot: '-1.5deg' },
+        { left: '18%', top: '50%', rot: '3deg' },
+        { left: '62%', top: '48%', rot: '2.5deg' },
+      ];
+
+      const cascadePositions = [
+        { left: '6%', top: '6%', rot: '-3deg' },
+        { left: '22%', top: '18%', rot: '-1.5deg' },
+        { left: '38%', top: '30%', rot: '0deg' },
+        { left: '54%', top: '42%', rot: '1.5deg' },
+        { left: '70%', top: '52%', rot: '3deg' },
+      ];
+
+      plates.forEach((plate) => {
+        let dragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function startDrag(clientX, clientY) {
+          dragging = true;
+          topZ += 1;
+          plate.style.zIndex = topZ;
+          plate.classList.remove('is-animating');
+          plate.style.borderColor = '#FF4D79';
+
+          const canvasRect = ltCanvas.getBoundingClientRect();
+          const plateRect = plate.getBoundingClientRect();
+          offsetX = clientX - plateRect.left;
+          offsetY = clientY - plateRect.top;
+
+          // Convert percentage positioning to pixel positioning for smooth dragging
+          plate.style.left = (plateRect.left - canvasRect.left) + 'px';
+          plate.style.top = (plateRect.top - canvasRect.top) + 'px';
+        }
+
+        function moveDrag(clientX, clientY) {
+          if (!dragging) return;
+          const canvasRect = ltCanvas.getBoundingClientRect();
+          let newX = clientX - canvasRect.left - offsetX;
+          let newY = clientY - canvasRect.top - offsetY;
+
+          // Keep partially inside artboard
+          newX = Math.max(-40, Math.min(canvasRect.width - 80, newX));
+          newY = Math.max(-20, Math.min(canvasRect.height - 80, newY));
+
+          plate.style.left = newX + 'px';
+          plate.style.top = newY + 'px';
+          dragTelemetry.textContent = `X: ${String(Math.round(newX)).padStart(3, '0')} · Y: ${String(Math.round(newY)).padStart(3, '0')}`;
+        }
+
+        function endDrag() {
+          if (!dragging) return;
+          dragging = false;
+          plate.style.borderColor = '';
+        }
+
+        plate.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          startDrag(e.clientX, e.clientY);
+        });
+        window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+        window.addEventListener('mouseup', endDrag);
+
+        plate.addEventListener('touchstart', (e) => {
+          if (e.touches[0]) startDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+          if (dragging && e.touches[0]) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        window.addEventListener('touchend', endDrag);
+      });
+
+      function applyPlateLayout(layoutArr, label) {
+        plates.forEach((plate, i) => {
+          const pos = layoutArr[i];
+          if (!pos) return;
+          plate.classList.add('is-animating');
+          plate.style.left = pos.left;
+          plate.style.top = pos.top;
+          plate.style.transform = `rotate(${pos.rot})`;
+          plate.style.zIndex = 12 + i;
+        });
+        showToast(label);
+      }
+
+      document.getElementById('btn-cascade').addEventListener('click', () => {
+        applyPlateLayout(cascadePositions, 'SPREAD // DIAGONAL CASCADE');
+      });
+      document.getElementById('btn-reset-spread').addEventListener('click', () => {
+        applyPlateLayout(initialPositions, 'SPREAD // RESET TO DEFAULT');
+      });
+
+      // 6. ACT V NEIGHBORHOOD MATRIX MORPHING
+      const districts = {
+        euljiro: {
+          code: 'DISTRICT 01 // EULJIRO',
+          kr: '을지로',
+          coord: '37.5663° N · 126.9910° E',
+          glow: '#FF4D79',
+          img: 'https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=1000&q=80',
+          excerpt: '“Corrugated steel shutters, warm printshop ink, and hidden vinyl bars floating above wet neon granite.”',
+          meta: 'TEMP: 6500K NEON // SOUND: RAIN + PRESSES',
+        },
+        bukchon: {
+          code: 'DISTRICT 02 // BUKCHON',
+          kr: '북촌',
+          coord: '37.5826° N · 126.9830° E',
+          glow: '#F3F1ED',
+          img: 'https://images.unsplash.com/photo-1583167617240-1b4d8e5f9f27?auto=format&fit=crop&w=1000&q=80',
+          excerpt: '“Curved clay tiles step down the hillside, framing blue hour and pine timber in hushed negative space.”',
+          meta: 'TEMP: 2700K HANJI // SOUND: WIND IN COURTYARD',
+        },
+        seongsu: {
+          code: 'DISTRICT 03 // SEONGSU',
+          kr: '성수동',
+          coord: '37.5445° N · 127.0560° E',
+          glow: '#38BDF8',
+          img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1000&q=80',
+          excerpt: '“Red-brick shoe factories reborn as raw concrete tea pavilions and subterranean sound studios.”',
+          meta: 'TEMP: 4200K CONCRETE // SOUND: ANALOG SYNTH',
+        },
+        yeouido: {
+          code: 'DISTRICT 04 // YEOUIDO',
+          kr: '여의도',
+          coord: '37.5284° N · 126.9341° E',
+          glow: '#FF4D79',
+          img: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1000&q=80',
+          excerpt: '“Illuminated cherry canopies drift across the Han River embankment as financial towers dissolve in mist.”',
+          meta: 'TEMP: 3200K BLOSSOM // SOUND: RIVER CURRENT',
+        },
+        ikseon: {
+          code: 'DISTRICT 05 // IKSEON',
+          kr: '익선동',
+          coord: '37.5742° N · 126.9896° E',
+          glow: '#F59E0B',
+          img: 'https://images.unsplash.com/photo-1546874177-9e664107314e?auto=format&fit=crop&w=1000&q=80',
+          excerpt: '“Labyrinthine 1920s hanok alleys glowing with amber glass roofs, espresso steam, and midnight shadows.”',
+          meta: 'TEMP: 2400K TUNGSTEN // SOUND: FOOTSTEPS ON STONE',
+        },
+      };
+
+      const matrixBgKr = document.getElementById('matrix-bg-kr');
+      const matrixGlow = document.getElementById('matrix-glow');
+      const distCode = document.getElementById('dist-code');
+      const distCoord = document.getElementById('dist-coord');
+      const distImg = document.getElementById('dist-img');
+      const distExcerpt = document.getElementById('dist-excerpt');
+      const distMeta = document.getElementById('dist-meta');
+      const districtRows = document.querySelectorAll('.district-row');
+
+      function selectDistrict(key) {
+        const d = districts[key];
+        if (!d) return;
+        matrixBgKr.textContent = d.kr;
+        matrixGlow.style.background = d.glow;
+        distCode.textContent = d.code;
+        distCoord.textContent = d.coord;
+        distImg.src = d.img;
+        distExcerpt.textContent = d.excerpt;
+        distMeta.textContent = d.meta;
+
+        districtRows.forEach((row) => {
+          const active = row.getAttribute('data-district') === key;
+          const title = row.querySelector('.font-display');
+          const num = row.querySelector('.font-mono');
+          title.classList.toggle('text-[#F3F1ED]', active);
+          title.classList.toggle('text-[#8A8782]', !active);
+          num.classList.toggle('text-[#FF4D79]', active);
+          num.classList.toggle('text-[#8A8782]', !active);
+        });
+      }
+
+      districtRows.forEach((row) => {
+        const key = row.getAttribute('data-district');
+        row.addEventListener('mouseenter', () => selectDistrict(key));
+        row.addEventListener('click', () => selectDistrict(key));
+      });
+
+      // 7. FIGMA BLUEPRINT MODE (Key: G) + LIVE REDLINE HOVER INSPECTOR + SPECS DRAWER (Key: T)
+      const blueprintOverlay = document.getElementById('blueprint-overlay');
+      const btnXray = document.getElementById('btn-xray');
+      const btnSpecs = document.getElementById('btn-specs');
+      const specsDrawer = document.getElementById('specs-drawer');
+      const closeSpecs = document.getElementById('close-specs');
+      const figmaTooltip = document.getElementById('figma-tooltip');
+      let blueprintOn = false;
+      let specsOn = false;
+
+      function rgbToHex(rgb) {
+        const m = rgb.match(/\d+/g);
+        if (!m || m.length < 3) return rgb;
+        return '#' + m.slice(0, 3).map((x) => parseInt(x, 10).toString(16).padStart(2, '0')).join('').toUpperCase();
+      }
+
+      function toggleBlueprint() {
+        blueprintOn = !blueprintOn;
+        blueprintOverlay.classList.toggle('hidden', !blueprintOn);
+        document.body.classList.toggle('blueprint-active', blueprintOn);
+        btnXray.classList.toggle('bg-[#FF4D79]', blueprintOn);
+        btnXray.classList.toggle('text-[#09090B]', blueprintOn);
+        if (!blueprintOn) figmaTooltip.classList.add('hidden');
+        showToast(blueprintOn ? 'BLUEPRINT MODE // 16-COL + REDLINE ON' : 'BLUEPRINT MODE // OFF');
+      }
+
+      function toggleSpecs(forceState) {
+        specsOn = typeof forceState === 'boolean' ? forceState : !specsOn;
+        specsDrawer.classList.toggle('translate-x-full', !specsOn);
+        btnSpecs.classList.toggle('bg-[#FF4D79]', specsOn);
+        btnSpecs.classList.toggle('text-[#09090B]', specsOn);
+      }
+
+      btnXray.addEventListener('click', toggleBlueprint);
+      btnSpecs.addEventListener('click', () => toggleSpecs());
+      closeSpecs.addEventListener('click', () => toggleSpecs(false));
+
+      // Live Redline Hover Inspector when Blueprint Mode is active
+      document.addEventListener('mousemove', (e) => {
+        if (!blueprintOn) return;
+        const target = e.target.closest('[data-figma]');
+        if (!target) {
+          figmaTooltip.classList.add('hidden');
+          return;
+        }
+        const cs = window.getComputedStyle(target);
+        const label = target.getAttribute('data-figma');
+        const font = cs.fontFamily.split(',')[0].replace(/['"]/g, '');
+        const size = cs.fontSize;
+        const lh = cs.lineHeight;
+        const hex = rgbToHex(cs.color);
+
+        figmaTooltip.innerHTML =
+          `<div class="text-[#FF4D79] mb-1">${label}</div>` +
+          `<div>FONT: ${font}</div>` +
+          `<div>SIZE: ${size} / LH: ${lh}</div>` +
+          `<div>INK: ${hex}</div>`;
+
+        figmaTooltip.classList.remove('hidden');
+        const x = Math.min(window.innerWidth - 280, e.clientX + 16);
+        const y = Math.min(window.innerHeight - 110, e.clientY + 16);
+        figmaTooltip.style.left = x + 'px';
+        figmaTooltip.style.top = y + 'px';
+      });
+
+      // One-Click Copy Spec Buttons
+      document.querySelectorAll('.copy-spec').forEach((btn) => {
+        btn.addEventListener('click', () => copyToClipboard(btn.getAttribute('data-copy')));
+      });
+
+      // Keyboard Shortcuts
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'g' || e.key === 'G') toggleBlueprint();
+        if (e.key === 't' || e.key === 'T') toggleSpecs();
+        if (e.key === 'Escape') {
+          toggleSpecs(false);
+          if (blueprintOn) toggleBlueprint();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
